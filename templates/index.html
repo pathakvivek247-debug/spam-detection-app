@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spam Detection Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0b0f0e, #111615);
+            color: #e6f5f1;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            background: #0e1412;
+            border-bottom: 1px solid rgba(0,255,150,0.2);
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 15px;
+            padding: 15px;
+            flex: 1;
+        }
+
+        .card {
+            background: #121918;
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid rgba(0,255,150,0.15);
+            display: flex;
+            flex-direction: column;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+            color: #8fdacb;
+        }
+
+        input {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            width: 65%;
+            background: #0c1211;
+            color: #d6fff5;
+        }
+
+        button {
+            padding: 10px 14px;
+            margin-left: 8px;
+            border: none;
+            border-radius: 5px;
+            background: #1f6f5c;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #249c7a;
+        }
+
+        .block-btn {
+            background: #8b1e1e;
+            margin-top: 10px;
+        }
+
+        .result {
+            margin-top: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #6fffd2;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th, td {
+            padding: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        th {
+            background: #16201e;
+            color: #8fdacb;
+        }
+
+        .table-container {
+            overflow-y: auto;
+            flex: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    🤖 Spam Detection Dashboard
+</header>
+
+<div class="container">
+
+    <!-- LEFT PANEL -->
+    <div class="card">
+        <h2>Check Message</h2>
+
+        <form method="POST">
+            <input type="text" name="message" placeholder="Enter message..." required>
+            <button type="submit">Check</button>
+        </form>
+
+        {% if result %}
+        <div class="result">
+            Result: {{ result }}
+        </div>
+
+        <!-- BLOCK BUTTON ONLY FOR SPAM -->
+        {% if result == "Spam" and last_message %}
+        <form method="POST">
+            <input type="hidden" name="block_msg" value="{{ last_message }}">
+            <button type="submit" class="block-btn">🚫 Block</button>
+        </form>
+        {% endif %}
+
+        {% endif %}
+
+        <h2 style="margin-top:15px;">History</h2>
+
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>Message</th>
+                    <th>Result</th>
+                    <th>Status</th>
+                </tr>
+
+                {% for msg, res, status in history %}
+                <tr>
+                    <td>{{ msg }}</td>
+                    <td>{{ res }}</td>
+                    <td>{{ status }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="card">
+        <h2>Dataset (Spam vs Ham)</h2>
+
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>Label</th>
+                    <th>Message</th>
+                </tr>
+
+                {% for row in data %}
+                <tr>
+                    <td>{{ row[0] }}</td>
+                    <td>{{ row[1] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

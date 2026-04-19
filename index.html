@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spam AI System</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial;
+            background: linear-gradient(135deg, #000428, #004e92, #00c6ff);
+            color: white;
+        }
+
+        .container {
+            text-align: center;
+            padding: 50px;
+        }
+
+        h1 {
+            text-shadow: 0 0 15px cyan;
+        }
+
+        .box {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 15px;
+            background: rgba(0,0,0,0.5);
+            box-shadow: 0 0 25px cyan;
+            display: inline-block;
+        }
+
+        input {
+            padding: 10px;
+            width: 300px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        button {
+            padding: 10px;
+            background: cyan;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .result {
+            margin-top: 15px;
+            font-size: 20px;
+        }
+
+        .spam {
+            color: red;
+        }
+
+        .ham {
+            color: lightgreen;
+        }
+
+        table {
+            margin-top: 30px;
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid white;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>🤖 Spam Detection System</h1>
+
+    <div class="box">
+        <form method="POST">
+            <input type="text" name="message" placeholder="Enter message" required>
+            <button type="submit">Check</button>
+        </form>
+
+        {% if result %}
+        <div class="result {{ 'spam' if result=='Spam' else 'ham' }}">
+            Result: {{ result }}
+        </div>
+        {% endif %}
+    </div>
+
+    {% if history %}
+    <table>
+        <tr>
+            <th>Message</th>
+            <th>Prediction</th>
+        </tr>
+
+        {% for msg, pred in history %}
+        <tr>
+            <td>{{ msg }}</td>
+            <td class="{{ 'spam' if pred=='Spam' else 'ham' }}">{{ pred }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
